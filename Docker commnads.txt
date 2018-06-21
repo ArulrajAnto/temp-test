@@ -1,0 +1,196 @@
+var http = require('http');
+
+http.createServer(function(req, res){
+
+res.writeHead(200, {'content-type':'text/plain'});
+res.end('Hello World!');
+}).listen(9001);
+
+console.log('Server is running on a port over 9001 !!');
+
+
+
+
+
+51  docker build -t nodejs .
+   52  docker images
+   53  docker run -it -d --name nodejs-web 3fd96d316ace
+   54  docker ps
+   55  docker exec -it nodejs-web bash
+   56  docker restart
+   57  /etc/init.d/docker restart
+   58  docker ps
+   59  docker ps -a
+   60  docker start nodejs-web
+   61  docker ps
+   62  #docker run -d -v /
+   63  mkdir /var/docker
+   64  docker run -d -v /var/docker/:/var/www/html -p 80:80 nodejs-web
+
+   
+   docker build -t centos-web-page .
+   
+   
+   docker run -it -d --name nodejs-web -v ~/host:/var/docker -p 8080:80 3fd96d316ace(host port 80, and container port 8080)
+   
+   docker run -it -d --name nodejs-web -v ~/host:/var/docker -p 8080:8080 085535406da6
+   
+   
+   docker exec nodejs-web ps aux | grep node | awk '{print $2}'
+   docker exec -it nodejs-web bash
+   
+   docker system prune -a
+   
+aws ecr get-login --no-include-email --region ap-southeast-1
+eval $(aws ecr get-login --no-include-email | sed 's|https://||')
+docker build -t docker .
+docker tag docker:latest 912601166297.dkr.ecr.ap-southeast-1.amazonaws.com/docker:latest
+docker push 912601166297.dkr.ecr.ap-southeast-1.amazonaws.com/docker:latest
+
+
+
+
+
+   https://semaphoreci.com/community/tutorials/dockerizing-a-node-js-web-application
+   https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+   https://buddy.works/guides/how-dockerize-node-application
+   how to run nodejs inside docker
+   
+   
+   
+   
+   echo "Push invoked"
+docker build -t damutest .
+docker tag damutest:latest 466749146115.dkr.ecr.ap-south-1.amazonaws.com/damutest:0.0.1
+eval $(aws ecr get-login --region ap-south-1 --no-include-email | sed "s|https://||")
+docker push 466749146115.dkr.ecr.ap-south-1.amazonaws.com/damutest:0.0.1
+if [[ $(docker images -q --filter "dangling=true") ]]; then docker rmi $(docker images --filter "dangling=true" -q --no-trunc); else echo "No dangling images found"; fi
+aws ecr list-images  --region ap-south-1 --repository-name damutest --query "imageIds[?type(imageTag)!='string'].[imageDigest]" --output text | while read line; do aws ecr batch-delete-image  --region ap-south-1 --repository-name damutest --image-ids imageDigest=$line; done
+
+
+
+
+vim /usr/lib/systemd/system/docker.service
+ExecStart=/usr/bin/dockerd --insecure-registry <server ip address>:5000
+
+vim /etc/docker/daemon.json
+
+{
+  "insecure-registries" : ["54.179.166.253:5000"]
+}
+
+docker images
+docker tag nodejs:latest 54.179.166.253/anto-docker:latest
+docker push 54.179.166.253:5000/anto-docker:latest
+
+
+#Download base image ubuntu 16.04
+FROM ubuntu
+
+# Update Software repository
+RUN apt-get update -y
+RUN apt-get install nodejs -y
+RUN apt-get install npm -y
+RUN apt-get install curl vim -y
+
+# Install app dependencies
+RUN npm install
+
+COPY server.js /root/server.js
+
+# Binds to port 8080
+EXPOSE  8080
+
+CMD ["nodejs", "/root/server.js"]	
+
+##########################################################
+#Download base image ubuntu 16.04
+FROM centos:latest
+
+# Update Software repository
+RUN yum update -y
+RUN yum install -y vim screen telnet elinks java-1.8.0 wget
+RUN wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN rpm -ivh epel-release-latest-7.noarch.rpm
+RUN yum install -y httpd
+RUN echo "Hi, This is Arulraj Anto, test page 1" > /var/www/html/index.html
+CMD service httpd start
+CMD chkconfig httpd on
+
+# Binds to port 8080
+EXPOSE  8080
+
+CMD ["nodejs", "/root/server.js"]	
+
+
+########################################################################################
+
+
+# Pull the centos image from the local repository
+FROM centos:latest
+USER root
+# Update image
+RUN yum update -y
+RUN yum install -y vim screen telnet elinks java-1.8.0 wget
+RUN wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN rpm -ivh epel-release-latest-7.noarch.rpm
+RUN yum -y install httpd; yum clean all; systemctl enable httpd.service; systemctl start httpd.service
+# Add configuration file
+RUN echo "The Web Server is Running" > /var/www/html/index.html
+EXPOSE 8012
+
+# Start the service
+CMD ["-D", "FOREGROUND"]
+ENTRYPOINT ["/usr/sbin/httpd"]
+
+#####################################################################################
+
+yum update -y 
+yum install -y httpd
+service httpd start
+chkconfig httpd on
+echo "Hi, This is Arulraj Anto, test page 1" > /var/www/html/index.html 
+yum update -y
+yum install wget -y 
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -ivh epel-release-latest-7.noarch.rpm
+yum install vim screen telnet elinks java-1.8.0 -y
+yum update -y
+
+
+
+
+
+vim /etc/apache2/ports.conf
+ServerName localhost:80
+
+
+
+    1  apt-get y install apache2*
+    2  apt-get install apache2*
+    3  vim /var/www/html/index.html
+    4  apt install vim -y
+    5  vim /var/www/html/index.html
+    6  curl localhost
+    7  /etc/init.d/apache2 status
+    8  /etc/init.d/apache2 start
+    9  vim /etc/apache2/conf-enabled/apache2-doc.conf
+   10  vim /etc/apache2/apache2.conf
+   11  vim /etc/apache2/ports.conf
+   12  /etc/init.d/apache2 start
+   13  /etc/init.d/apache2 restart
+   14  /etc/init.d/apache2 status
+   15  curl localhost
+   16  vim /etc/apache2/ports.conf
+   17  vim /var/www/html/index.html
+   18  curl localhost
+   19  :q
+   20  vim /var/www/html/index.html
+   21  cp /var/www/html/index.html /var/www/html/index.html-old
+   22  vim/var/www/html/index.html
+   23  vim /var/www/html/index.html
+   24  curl localhost
+   25  history
+
+
+
